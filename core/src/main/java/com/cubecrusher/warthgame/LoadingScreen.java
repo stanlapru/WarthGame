@@ -30,8 +30,9 @@ public class LoadingScreen extends ManagedScreen {
     protected void create() {
         System.out.println("DEBUG: LoadingScreen called.");
         game.getScreenManager().addScreen("login", new LoginScreen());
+        game.getScreenManager().addScreen("game", new GameMap());
         game.getScreenManager().addScreen("main", new MainScreen());
-        game.getScreenManager().addScreenTransition("blend",new BlendingTransition(batch,1f));
+        game.getScreenManager().addScreenTransition("blend",new BlendingTransition(batch,0.5f));
         viewport = new FitViewport(game.getWidth(), game.getHeight());
         AssetMgr.preLoad();
     }
@@ -44,7 +45,6 @@ public class LoadingScreen extends ManagedScreen {
             assetManager.update(21);
             font = AssetMgr.manager.get("fonts/gui.ttf");
             font.draw(batch,AssetMgr.loadState,20,30);
-            VisUI.load(VisUI.SkinScale.X2);
             if (AssetMgr.allLoaded) {
                 System.out.println("DEBUG: LoginScreen called.");
                 if (Gdx.app.getType() == Application.ApplicationType.Android) {

@@ -8,6 +8,7 @@ public class Settings {
 
     private float sound; // Sound volume
     private float music; // Music volume
+    private int version; // Last played version
     private boolean debug; // Display debug information
 
     // This class is proudly derived from Trance Journey!
@@ -17,6 +18,7 @@ public class Settings {
         prefs = Gdx.app.getPreferences("WarthSettings");
         sound = prefs.getFloat("sound",1.0f);
         music = prefs.getFloat("music",1.0f);
+        version = prefs.getInteger("version", 1);
         debug = prefs.getBoolean("debug",true);
     }
 
@@ -29,6 +31,12 @@ public class Settings {
     public void setMusicVolume(float volume){
         this.music = volume;
         prefs.putFloat("music",volume);
+        prefs.flush();
+    }
+
+    public void setVersion(int version){
+        this.version = version;
+        prefs.putInteger("version",version);
         prefs.flush();
     }
 

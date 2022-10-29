@@ -27,7 +27,7 @@ public class LoginScreen extends ManagedScreen {
     private SpriteBatch batch = new SpriteBatch();
     private final ScreenManager screenManager = new ScreenManager();
     private final String devStage = "Indev";
-    private final String stageID = "cmt9";
+    private final String stageID = "cmt1";
     public String version = "Warth "+devStage+" "+stageID;
     private String gpSignInBtn = "Sign in to Google Play";
 

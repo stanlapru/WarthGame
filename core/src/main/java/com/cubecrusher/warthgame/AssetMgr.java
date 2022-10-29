@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.I18NBundle;
+import com.kotcrab.vis.ui.VisUI;
 
 import java.util.Locale;
 
@@ -50,7 +51,7 @@ public class AssetMgr {
     public static boolean preLoaded, allLoaded = false;
 
     public static void preLoad(){
-        loadState = "Loading fonts...";
+        loadState = "Preloading...";
         manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
         manager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
         FreetypeFontLoader.FreeTypeFontLoaderParameter mainP = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
@@ -63,7 +64,7 @@ public class AssetMgr {
         load();
     }
     public static void load(){
-        System.out.println("DEBUG: Assets loading.");
+        System.out.println("DEBUG: Assets preloaded.");
 
         //preLoad();
 
@@ -74,20 +75,21 @@ public class AssetMgr {
             //bundle = manager.get("locs/warth", I18NBundle.class);
 
             loadState = "Loading textures...";
-            manager.setLoader(Texture.class, new TextureLoader(resolver));
-            manager.load("images/libgdx.png", Texture.class);
+            //manager.setLoader(Texture.class, new TextureLoader(resolver));
 
             loadState = "Loading GUI...";
+            VisUI.load(VisUI.SkinScale.X2);
             //manager.load("ui/uiskin.json", Skin.class, skinPar);
 
             allLoaded = true;
 
             loadState = "Game loaded.";
 
-            System.out.println("DEBUG: Assets load queued.");
+            System.out.println("DEBUG: Assets loaded.");
         }
     }
 
+    /*
     public static void playSound(Sound sound) {
         sound.play();
     }
@@ -103,4 +105,5 @@ public class AssetMgr {
     public static void stopMusic(Music music){
         music.stop();
     }
+    */
 }
