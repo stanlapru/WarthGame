@@ -6,15 +6,15 @@ I thank you for your assistance.
 
 A boilerplate notice after project generation is left below in case it's needed later.
 
-TODO (in order):
-:white_check_mark: Options(SharedStorage),
-:arrow_right: GUI,
-:arrow_right: Translations,
-:arrow_right: Networking,
-:white_large_square: Small map,
-:white_large_square: Mechanics/Features,
-:white_large_square: Playtesting,
-:white_large_square: Release,
+TODO (in order):  
+:white_check_mark: Options(SharedStorage),  
+:arrow_right: GUI,  
+:arrow_right: Translations,  
+:arrow_right: Networking,  
+:white_large_square: Small map,  
+:white_large_square: Mechanics/Features,  
+:white_large_square: Playtesting,  
+:white_large_square: Release,  
 :white_large_square: a 1$ advertising campaign. 
 
 Estimated time is about 2 years.
