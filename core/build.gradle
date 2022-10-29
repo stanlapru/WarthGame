@@ -1,0 +1,27 @@
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+eclipse.project.name = appName + '-core'
+
+dependencies {
+	api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+	api "com.badlogicgames.gdx:gdx:$gdxVersion"
+	api "com.crashinvaders.lml:gdx-kiwi:$lmlVersion"
+	api "com.crashinvaders.lml:gdx-lml-vis:$lmlVersion"
+	api "com.crashinvaders.lml:gdx-lml:$lmlVersion"
+	api "com.github.crykn.guacamole:core:$guacamoleVersion"
+	api "com.github.crykn.guacamole:gdx:$guacamoleVersion"
+	api "com.github.crykn:libgdx-screenmanager:$screenManagerVersion"
+	api "com.github.tommyettinger:anim8-gdx:$anim8Version"
+	api "com.github.tommyettinger:digital:$digitalVersion"
+	api "com.github.tommyettinger:juniper:$juniperVersion"
+	api "com.github.tommyettinger:libgdx-utils:$utilsVersion"
+	api "com.github.tommyettinger:regexodus:$regExodusVersion"
+	api "com.github.tommyettinger:textratypist:$textratypistVersion"
+	api "com.kotcrab.vis:vis-ui:$visUiVersion"
+	api "com.rafaskoberg.gdx:typing-label:$typingLabelVersion"
+	api "com.strongjoshua:libgdx-inGameConsole:$inGameConsoleVersion"
+	api "de.tomgrill.gdxdialogs:gdx-dialogs-core:$dialogsVersion"
+	api "space.earlygrey:shapedrawer:$shapeDrawerVersion"
+	api "space.earlygrey:simple-graphs:$simpleGraphsVersion"
+	api "de.golfgl.gdxgamesvcs:gdx-gamesvcs-core:$gamesvcsVersion"
+	api project(':shared')
+}

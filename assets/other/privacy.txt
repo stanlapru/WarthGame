@@ -1,0 +1,36 @@
+Warth Game (c) 2022 cubecrusher
+
+PRIVACY POLICY
+Last updated 18 October 2022.
+===
+Warth stores and processes certain data in order to work.
+Upon first launch, Warth will prompt you to either Sign In or Register.
+Having an account and being Signed in is required to connect to the game servers and play Warth.
+
+Registration is required to create an account.
+
+The following data is required to create an account:
+1. Your E-mail;
+2. Your Password;
+3. Your Nickname.
+
+Should you so choose, you may also create an account and Sign In using Google Play Games, which will share the E-mail for the Google Account
+associated with Play Games with the developers of Warth.
+
+Upon accessing the server, which happens on sign-in, your IP address is shared with the server, which may be used to determine the country
+the request was sent from. Country deducted from the IP address is set to hidden to other players by default and may be enabled should the 
+player so choose. 
+
+Account data and IP address is also sent to the server upon joining a match for verification purposes and to update the list of match
+participants. 
+
+Upon making a turn in a match, data relating to the player's turn is sent to the server. This is done to calculate the results of the turn,
+which are then shortly sent to the players participating in this match. This behaviour is repeated until the match is over.
+
+All data is sent over a secure connection and cannot be read by any malicious actor, and will never be shared with or sold to anyone.
+
+Should the player choose to delete their account, they may do so by contacting the developers by E-mail. 
+Exact UID, Password, Nickname and E-mail are required to make the request. 
+Once the request is accepted, the account will be Set for Deletion. This state will last for 7 days to allow a player to reverse their 
+choice. 
+The account and associated data will be deleted permanently after this time period passes.
