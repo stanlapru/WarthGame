@@ -14,8 +14,7 @@ Roadmap:
 :arrow_right: Small map,  
 :white_large_square: Mechanics/Features,  
 :white_large_square: Playtesting,  
-:white_large_square: Release,  
-:white_large_square: a 1$ advertising campaign. 
+:white_large_square: Release.
 
 Estimated time is about 1 year.
 
