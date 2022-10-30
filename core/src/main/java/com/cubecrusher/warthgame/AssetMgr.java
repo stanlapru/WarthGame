@@ -1,5 +1,6 @@
 package com.cubecrusher.warthgame;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
@@ -21,10 +23,10 @@ import com.kotcrab.vis.ui.VisUI;
 
 import java.util.Locale;
 
-public class AssetMgr {
+import de.damios.guacamole.gdx.assets.Text;
+import de.damios.guacamole.gdx.assets.TextLoader;
 
-    // Responsible for loading assets and playing audio.
-    // AssetManager is wonky as heck. I do not recommend dealing with it.
+public class AssetMgr {
 
     // MUSIC
     public static Music mMenu;
@@ -40,6 +42,7 @@ public class AssetMgr {
     public static I18NBundle bundle;
 
     // TECHNICALS
+    private static Settings settings;
     public static final AssetManager manager = new AssetManager();
     public static FileHandleResolver resolver = new InternalFileHandleResolver();
     public static float loadProgress = 0.0f;
@@ -47,6 +50,8 @@ public class AssetMgr {
     public static String loadState = "Preparing to load game files.";
 
     public static String progress = ""+loadProgress*100;
+
+    public static Skin skn = new Skin();
 
     public static boolean preLoaded, allLoaded = false;
 
@@ -66,20 +71,28 @@ public class AssetMgr {
     public static void load(){
         System.out.println("DEBUG: Assets preloaded.");
 
-        //preLoad();
-
         if (preLoaded) {
+            settings = new Settings();
             loadState = "Loading localization...";
             manager.setLoader(I18NBundle.class, new I18NBundleLoader(resolver));
             manager.load("locs/warth", I18NBundle.class, new I18NBundleLoader.I18NBundleParameter(Locale.getDefault()));
             //bundle = manager.get("locs/warth", I18NBundle.class);
 
+            loadState = "Loading music...";
+            manager.setLoader(Music.class, new MusicLoader(resolver));
+            manager.load("music/Arpsequential - cubecrusher.mp3", Music.class);
+
+            loadState = "Loading sounds...";
+            manager.setLoader(Sound.class, new SoundLoader(resolver));
+
             loadState = "Loading textures...";
-            //manager.setLoader(Texture.class, new TextureLoader(resolver));
+            manager.setLoader(Texture.class, new TextureLoader(resolver));
 
             loadState = "Loading GUI...";
-            VisUI.load(VisUI.SkinScale.X2);
-            //manager.load("ui/uiskin.json", Skin.class, skinPar);
+            VisUI.load(Gdx.files.internal("ui/tinted/x2/tinted.json"));
+
+            //loadState = "Loading misc...";
+            //manager.load("other/licenses.txt",String.class);
 
             allLoaded = true;
 
@@ -89,13 +102,17 @@ public class AssetMgr {
         }
     }
 
-    /*
+
     public static void playSound(Sound sound) {
         sound.play();
     }
 
     public static void playMusic(Music music) {
         music.play();
+    }
+
+    public static void changeMusicVolume(Music music, float volume){
+        music.setVolume(volume);
     }
 
     public static void pauseMusic(Music music) {
@@ -105,5 +122,5 @@ public class AssetMgr {
     public static void stopMusic(Music music){
         music.stop();
     }
-    */
+
 }

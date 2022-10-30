@@ -3,42 +3,33 @@ package com.cubecrusher.warthgame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.cubecrusher.warthgame.windows.AboutW;
+import com.cubecrusher.warthgame.windows.LobbiesW;
+import com.cubecrusher.warthgame.windows.OptionsW;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.dialog.ConfirmDialogListener;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.widget.*;
 import de.eskalon.commons.screen.ManagedScreen;
 import de.eskalon.commons.screen.ScreenManager;
-import de.eskalon.commons.screen.transition.impl.BlendingTransition;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.jar.JarFile;
-import java.util.zip.ZipEntry;
 
 public class MainScreen extends ManagedScreen {
 
-    private Stage stage;
+    public Stage stage;
     private boolean debugOn = false;
     private Settings settings;
     private Main game;
     private SpriteBatch batch = new SpriteBatch();
     private final ScreenManager screenManager = new ScreenManager();
+    private OptionsW optionsW;
+    private AboutW aboutW;
+    private LobbiesW lobbiesW;
     private final String devStage = "Indev";
-    private final String stageID = "cmt3";
+    private final String stageID = "cmt6";
     public String version = "Warth "+devStage+" "+stageID;
 
     public MainScreen(){
@@ -48,42 +39,30 @@ public class MainScreen extends ManagedScreen {
     public String getVersion(){
         return version;
     }
+
     @Override
     protected void create() {
         game.getScreenManager().addScreen("gamemap", new GameMap());
 
-        //VisUI.load(VisUI.SkinScale.X2);
+        stage = new Stage();
+
+        Gdx.input.setInputProcessor(stage);
 
         settings = new Settings();
-        if (settings.getDebugEnabled())
-                debugOn = true;
 
         MenuBar menuBar = new MenuBar();
 
-        VisWindow chatWindow = new VisWindow(" Chat Window");
-        chatWindow.setMovable(false);
-        chatWindow.setKeepWithinStage(true);
-
-        VisWindow lobbiesWindow = new VisWindow(" Lobby Search");
-        lobbiesWindow.setMovable(true);
-        lobbiesWindow.setKeepWithinStage(true);
-        lobbiesWindow.addCloseButton();
-        lobbiesWindow.centerWindow();
-        lobbiesWindow.setVisible(false);
+        optionsW = new OptionsW();
+        aboutW = new AboutW();
+        lobbiesW = new LobbiesW();
 
         // Todo: Migrate into a separate method, make button listeners and make Client/Server work (on localhost for now)
         // ^ Deprioritized.
-        VisTable chatWindowLayout = new VisTable();
-        chatWindowLayout.add().expand().fill().row();
-        chatWindowLayout.add(new VisTextArea("")).expandX().fillX().spaceBottom(10).row();
-        chatWindowLayout.add(new VisTextField("...")).expandX().fillX();
-        chatWindowLayout.add(new VisTextButton("Send")).padLeft(10);
 
-        chatWindow.add(chatWindowLayout);
-
-        VisTextButton openTestMapBtn = new VisTextButton("Launch Gamemap");
+        VisTextButton openTestMapBtn = new VisTextButton("Launch Map");
         VisTextButton lobbySearchBtn = new VisTextButton("Search Lobbies");
-        VisTextButton toggleDebugBtn = new VisTextButton("Toggle Debug");
+        VisTextButton optionsBtn = new VisTextButton("Options");
+        VisTextButton aboutBtn = new VisTextButton("About");
         VisTextButton exitBtn = new VisTextButton("Exit");
 
         menuBar.setMenuListener(new MenuBar.MenuBarListener() {
@@ -107,16 +86,27 @@ public class MainScreen extends ManagedScreen {
         lobbySearchBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                lobbiesWindow.setVisible(true);
-                lobbiesWindow.fadeIn();
+                stage.addActor(lobbiesW);
+                lobbiesW.fadeIn();
+                lobbiesW.setVisible(true);
             }
         });
 
-        toggleDebugBtn.addListener(new ClickListener() {
+        optionsBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                settings.setDebug(!settings.getDebugEnabled());
-                stage.setDebugAll(settings.getDebugEnabled());
+                stage.addActor(optionsW);
+                optionsW.fadeIn();
+                optionsW.setVisible(true);
+            }
+        });
+
+        aboutBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stage.addActor(aboutW);
+                aboutW.fadeIn();
+                aboutW.setVisible(true);
             }
         });
 
@@ -133,6 +123,9 @@ public class MainScreen extends ManagedScreen {
             }
         });
 
+        VisLabel title = new VisLabel("Warth");
+        title.setFontScale(4);
+
         menuBar.addMenu(new Menu("Test"));
         menuBar.addMenu(new Menu("Test 2"));
 
@@ -143,21 +136,22 @@ public class MainScreen extends ManagedScreen {
 
         root.setFillParent(true);
         root.add(menuBar.getTable()).expandX().fillX().row();
+        menuBtn.add(title).top().left().spaceBottom(10).row();
         menuBtn.add(openTestMapBtn).expandX().fillX().spaceBottom(10).row();
         menuBtn.add(lobbySearchBtn).expandX().fillX().spaceBottom(10).row();
-        menuBtn.add(toggleDebugBtn).expandX().fillX().spaceBottom(10).row();
+        menuBtn.add(optionsBtn).expandX().fillX().spaceBottom(10).row();
+        //menuBtn.add(toggleDebugBtn).expandX().fillX().spaceBottom(10).row();
+        menuBtn.add(aboutBtn).expandX().fillX().spaceBottom(10).row();
         menuBtn.add(exitBtn).expandX().fillX();
 
         menu.add(menuBtn).expand();
-        menu.add(chatWindow).expand();
+        //menu.add(chatWindow).expand();
         root.add(menu).expand().fill().row();
         root.add(footer).expandX().left().padLeft(10);
         footer.add(new VisLabel(version)).left();
         footer.add(new LinkLabel("Discord","https://discord.gg/a2av2JmzSX")).left().padLeft(30);
 
-        stage = new Stage();
         stage.addActor(root);
-        stage.addActor(lobbiesWindow);
         stage.setDebugAll(debugOn);
 
     }
@@ -171,9 +165,12 @@ public class MainScreen extends ManagedScreen {
     public void render(float delta) {
         if (Gdx.input.getInputProcessor() != stage)
             Gdx.input.setInputProcessor(stage);
+        if (settings.getDebugEnabled())
+            stage.setDebugAll(true);
         Gdx.gl.glClearColor(0.05f,0.05f,0.1f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
+        //stage.setDebugAll(debugOn);
         stage.draw();
     }
 

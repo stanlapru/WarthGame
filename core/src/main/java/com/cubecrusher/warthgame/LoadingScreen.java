@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kotcrab.vis.ui.VisUI;
+import com.strongjoshua.console.Console;
+import com.strongjoshua.console.GUIConsole;
 
 import de.eskalon.commons.screen.ManagedScreen;
 import de.eskalon.commons.screen.ScreenManager;
@@ -46,19 +48,15 @@ public class LoadingScreen extends ManagedScreen {
             font = AssetMgr.manager.get("fonts/gui.ttf");
             font.draw(batch,AssetMgr.loadState,20,30);
             if (AssetMgr.allLoaded) {
-                System.out.println("DEBUG: LoginScreen called.");
-                if (Gdx.app.getType() == Application.ApplicationType.Android) {
-                    if (!game.gsClient.isSessionActive())
-                        //game.getScreenManager().pushScreen("login", "blend");
-                        // Todo: look into GPGS check-in procedures and make this work
-                        // Notable mention: implement Nobobo
-
-                        game.getScreenManager().pushScreen("main", "blend");
-                    else
-                        game.getScreenManager().pushScreen("main", "blend");
-                } else {
+                System.out.println("DEBUG: All loaded.");
+                //if (Gdx.app.getType() == Application.ApplicationType.Android) {
+                    //if (!game.gsClient.isSessionActive())
+                        //game.getScreenManager().pushScreen("main", "blend");
+                    //else
+                        //game.getScreenManager().pushScreen("main", "blend");
+                //} else {
                     game.getScreenManager().pushScreen("main", "blend");
-                }
+                //}
             }
         }
         batch.end();
@@ -71,7 +69,6 @@ public class LoadingScreen extends ManagedScreen {
 
     @Override
     public void dispose() {
-
     }
 
     @Override

@@ -11,9 +11,6 @@ public class Settings {
     private int version; // Last played version
     private boolean debug; // Display debug information
 
-    // This class is proudly derived from Trance Journey!
-    // (actually blatantly copypasted and edited)
-
     public Settings(){
         prefs = Gdx.app.getPreferences("WarthSettings");
         sound = prefs.getFloat("sound",1.0f);
