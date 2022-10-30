@@ -9,10 +9,10 @@ A boilerplate notice after project generation is left below in case it's needed 
 Roadmap:  
 :white_check_mark: Options(SharedStorage),  
 :white_check_mark: GUI,  
-:arrow_right: Translations,  
-:arrow_right: Networking,  
 :arrow_right: Small map,  
 :white_large_square: Mechanics/Features,  
+:white_large_square: Translations,  
+:white_large_square: Networking,  
 :white_large_square: Playtesting,  
 :white_large_square: Release.
 
