@@ -1,18 +1,14 @@
-package com.cubecrusher.warthgame.windows;
+package com.cubecrusher.warthgame.windows.main;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.cubecrusher.warthgame.MainScreen;
 import com.kotcrab.vis.ui.util.TableUtils;
 import com.kotcrab.vis.ui.widget.LinkLabel;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisWindow;
 
 public class AboutW extends VisWindow {
     private final MainScreen mainScr = new MainScreen();
-    //private final LicensesW licensesW = new LicensesW();
 
     public AboutW() {
         super(" About");

@@ -1,5 +1,6 @@
-package com.cubecrusher.warthgame.windows;
+package com.cubecrusher.warthgame.windows.main;
 
+import com.cubecrusher.warthgame.Client;
 import com.kotcrab.vis.ui.util.TableUtils;
 import com.kotcrab.vis.ui.widget.VisWindow;
 

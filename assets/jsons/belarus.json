@@ -1,0 +1,98 @@
+{
+  "obl-vitebsk": {
+      "id": 0,
+      "type": "province",
+      "name": "Vitebsk Oblast",
+      "population": 10000,
+      "unrest": 10,
+      "food": 600
+  },
+  "obl-grodno": {
+      "id": 1,
+      "type": "province",
+      "name": "Grodno Oblast",
+      "population": 10000,
+      "unrest": 10,
+      "food": 600
+  },
+  "obl-minsk": {
+      "id": 2,
+      "type": "province",
+      "name": "Minsk Oblast",
+      "population": 10000,
+      "unrest": 10,
+      "food": 600
+  },
+  "obl-mogilev": {
+      "id": 3,
+      "type": "province",
+      "name": "Mogilev Oblast",
+      "population": 10000,
+      "unrest": 10,
+      "food": 600
+  },
+  "obl-brest": {
+      "id": 4,
+      "type": "province",
+      "name": "Brest Oblast",
+      "population": 10000,
+      "unrest": 10,
+      "food": 600
+  },
+  "obl-gomel": {
+      "id": 5,
+      "type": "province",
+      "name": "Gomel Oblast",
+      "population": 10000,
+      "unrest": 10,
+      "food": 600
+  },
+  "vitebsk": {
+      "id": 6,
+      "type": "city",
+      "name": "Vitebsk",
+      "population": 10000,
+      "unrest": 10,
+      "food": 600
+  },
+  "grodno": {
+      "id": 7,
+      "type": "city",
+      "name": "Grodno",
+      "population": 10000,
+      "unrest": 10,
+      "food": 600
+  },
+  "minsk": {
+      "id": 8,
+      "type": "city",
+      "name": "Minsk",
+      "population": 10000,
+      "unrest": 10,
+      "food": 600
+  },
+  "mogilev": {
+      "id": 9,
+      "type": "city",
+      "name": "Mogilev",
+      "population": 10000,
+      "unrest": 10,
+      "food": 600
+  },
+  "brest": {
+      "id": 10,
+      "type": "city",
+      "name": "Brest",
+      "population": 10000,
+      "unrest": 10,
+      "food": 600
+  },
+  "gomel": {
+      "id": 11,
+      "type": "city",
+      "name": "Gomel",
+      "population": 10000,
+      "unrest": 10,
+      "food": 600
+  }
+}

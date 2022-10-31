@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.cubecrusher.warthgame.windows.AboutW;
-import com.cubecrusher.warthgame.windows.LobbiesW;
-import com.cubecrusher.warthgame.windows.OptionsW;
+import com.cubecrusher.warthgame.windows.main.AboutW;
+import com.cubecrusher.warthgame.windows.main.LobbiesW;
+import com.cubecrusher.warthgame.windows.main.OptionsW;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.dialog.ConfirmDialogListener;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
@@ -29,7 +29,7 @@ public class MainScreen extends ManagedScreen {
     private AboutW aboutW;
     private LobbiesW lobbiesW;
     private final String devStage = "Indev";
-    private final String stageID = "cmt6";
+    private final String stageID = "cmt7";
     public String version = "Warth "+devStage+" "+stageID;
 
     public MainScreen(){
@@ -80,6 +80,7 @@ public class MainScreen extends ManagedScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("DEBUG: GameMap called.");
+                Gdx.input.setInputProcessor(null);
                 game.getScreenManager().pushScreen("gamemap", null);
             }
         });

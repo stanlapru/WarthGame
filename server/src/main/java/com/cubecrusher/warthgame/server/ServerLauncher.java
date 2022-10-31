@@ -22,6 +22,7 @@ public class ServerLauncher {
 		sc.close();
 
 		try {
+			System.out.println("Started listening on port "+portNumber);
 			serverSocket = new ServerSocket(portNumber);
 			acceptClients();
 		} catch (IOException e) {

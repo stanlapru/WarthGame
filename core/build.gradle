@@ -23,5 +23,6 @@ dependencies {
 	api "space.earlygrey:shapedrawer:$shapeDrawerVersion"
 	api "space.earlygrey:simple-graphs:$simpleGraphsVersion"
 	api "de.golfgl.gdxgamesvcs:gdx-gamesvcs-core:$gamesvcsVersion"
+	implementation 'com.google.code.gson:gson:2.10'
 	api project(':shared')
 }

@@ -19,18 +19,14 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.kotcrab.vis.ui.util.dialog.ConfirmDialogListener;
-import com.kotcrab.vis.ui.util.dialog.Dialogs;
+import com.cubecrusher.warthgame.maps.Belarus;
+import com.cubecrusher.warthgame.windows.game.RegionInfoW;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextButton;
-
 import de.eskalon.commons.screen.ManagedScreen;
-import de.eskalon.commons.screen.transition.impl.BlendingTransition;
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
 public class GameMap extends ManagedScreen implements InputProcessor, GestureDetector.GestureListener {
-
-    // Todo: We're now ready to make a map! Grab that Adobe Illustrator and get verticing!
 
     private PolygonSpriteBatch batch = new PolygonSpriteBatch();
     private SpriteBatch sBatch = new SpriteBatch();
@@ -42,25 +38,56 @@ public class GameMap extends ManagedScreen implements InputProcessor, GestureDet
     private Pixmap pixmap;
     private MainScreen mainScr;
     private InputMultiplexer inputMultiplexer;
+    private RegionInfoW regionInfoW;
     private OrthographicCamera camera;
-    private Polygon polygon;
-    private final float[] polReg = new float[]{0.0f, 0.0f, 100f, 100f, 100f, 0f};
+    protected Polygon[] polygons;
+    private String[] regionNames;
+    private float[] polReg;
     private Main game;
-    private boolean touchDown = false;
+    private boolean touchDown, dragged = false;
     private float currentZoom;
+    private Belarus belarus;
+    private String regionName = "";
     private Vector3 tp;
+    private int latestTouchedRegionId = -1;
 
     public GameMap(){
         this.game = (Main) Gdx.app.getApplicationListener();
     }
 
     public void region(){
-        polygon = new Polygon();
-        polygon.setVertices(polReg);
+        belarus = new Belarus();
+        polygons = new Polygon[belarus.getRegionAmt()];
+        regionNames = new String[belarus.getRegionAmt()];
+        for (int i = 0; i <= polygons.length-1; i++) {
+            polygons[i] = new Polygon();
+            polReg = belarus.getVertices(i);
+            regionNames[i] = belarus.getRegionName(i);
+            polygons[i].setVertices(polReg);
+        }
     }
 
-    public boolean isShapeClicked(Polygon polygon, boolean touchedDown){
-        return (polygon.contains(tp.x, tp.y) && touchedDown);
+    public Integer getClickedShapeId(){
+        int id = -1;
+        for (int i = 0; i <= polygons.length-1; i++) {
+            if (polygons[i].contains(tp.x, tp.y)){
+                return i;
+            }
+        }
+        return id;
+    }
+
+    public boolean isShapeClicked(){
+        for (int i = 0; i <= polygons.length-1; i++) {
+            if (polygons[i].contains(tp.x, tp.y)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String getClickedShapeName(){
+        return belarus.getRegionName(getClickedShapeId());
     }
 
     @Override
@@ -68,19 +95,17 @@ public class GameMap extends ManagedScreen implements InputProcessor, GestureDet
         System.out.println("DEBUG: GameMap called.");
 
         camera = new OrthographicCamera();
-        camera.position.set(0,0,0);
         camera.setToOrtho(true);
 
         settings = new Settings();
         mainScr = new MainScreen();
 
-        game.getScreenManager().addScreen("gamemap", new GameMap());
-        VisLabel verLabel = new VisLabel(mainScr.getVersion()+"     Test: Background should flash on shape click.");
+        VisLabel verLabel = new VisLabel(mainScr.getVersion());
         verLabel.setPosition(10,0);
         VisTextButton exitBtn = new VisTextButton("Return to Main");
         exitBtn.setPosition(20,50);
-        VisTextButton resetCamBtn = new VisTextButton("Center Camera");
-        resetCamBtn.setPosition(20,100);
+        VisTextButton resetCamBtn = new VisTextButton("Reset Camera");
+        resetCamBtn.setPosition(20,120);
 
         exitBtn.addListener(new ClickListener() {
             @Override
@@ -97,25 +122,27 @@ public class GameMap extends ManagedScreen implements InputProcessor, GestureDet
                 camera.position.set(0,0,0);
             }
         });
+
+        region();
+
         stage.addActor(exitBtn);
         stage.addActor(resetCamBtn);
         stage.addActor(verLabel);
         stage.setDebugAll(settings.getDebugEnabled());
 
         inputMultiplexer = new InputMultiplexer(stage,this);
-        Gdx.input.setInputProcessor(inputMultiplexer);
-
-        region();
 
         tp = new Vector3();
         tp.set(-10000,-10000,0);
 
-        pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA4444);
         pixmap.setColor(Color.WHITE);
         pixmap.drawPixel(0, 0);
         texture = new Texture(pixmap);
         region = new TextureRegion(texture, 0, 0, 1, 1);
         drawer = new ShapeDrawer(batch, region);
+
+        camera.position.set(0,0,0);
     }
 
     @Override
@@ -124,25 +151,43 @@ public class GameMap extends ManagedScreen implements InputProcessor, GestureDet
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.05f,0.05f,0.1f,1);
+        if (Gdx.input.getInputProcessor() != inputMultiplexer)
+            Gdx.input.setInputProcessor(inputMultiplexer);
 
-        if (isShapeClicked(polygon, Gdx.input.justTouched())){
-            // Todo: this wrongly activates on interacting with UI when last click was inside the shape.
-            System.out.println("DEBUG: Shape clicked.");
-            Gdx.gl.glClearColor(0.1f,0.1f,0.15f,1);
-            touchDown = false;
+        Gdx.gl.glClearColor(0.05f, 0.05f, 0.1f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        batch.begin();
+        for (int i = 0; i <= polygons.length - 1; i++) {
+
+            drawer.filledPolygon(polygons[i]);
+            drawer.setColor(belarus.getRegionColor(i));
+
+             if (polygons[i].contains(Gdx.input.getX(), Gdx.input.getY())) {
+                 drawer.setColor(1,1,1,1);
+            }
+
+            if (touchDown && !dragged && isShapeClicked()) {
+                touchDown = false;
+                regionInfoW = new RegionInfoW("");
+                if (latestTouchedRegionId == -1) regionInfoW.remove();
+                regionInfoW = new RegionInfoW(getClickedShapeName());
+                stage.addActor(regionInfoW);
+                regionInfoW.fadeIn();
+                regionInfoW.setVisible(true);
+                latestTouchedRegionId = getClickedShapeId();
+            } else {
+                latestTouchedRegionId = -1;
+            }
         }
 
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch.end();
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-        drawer.polygon(polygon);
-        batch.end();
     }
 
     @Override
@@ -177,11 +222,14 @@ public class GameMap extends ManagedScreen implements InputProcessor, GestureDet
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (button != Input.Buttons.LEFT || pointer > 0) return false;
         camera.unproject(tp.set(screenX, screenY, 0));
+        touchDown = true;
         return true;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        touchDown = false;
+        dragged = false;
         return true;
     }
 
@@ -189,7 +237,7 @@ public class GameMap extends ManagedScreen implements InputProcessor, GestureDet
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         float x = Gdx.input.getDeltaX();
         float y = Gdx.input.getDeltaY();
-
+        dragged = true;
         camera.translate(-x,-y);
         return true;
     }
@@ -213,7 +261,8 @@ public class GameMap extends ManagedScreen implements InputProcessor, GestureDet
 
     @Override
     public boolean scrolled(float amountX, float amountY) {
-
+        //camera.zoom = amountX*0.01f + currentZoom;
+        //camera.update();
         return false;
     }
 
@@ -248,6 +297,7 @@ public class GameMap extends ManagedScreen implements InputProcessor, GestureDet
     @Override
     public boolean panStop(float x, float y, int pointer, int button) {
         currentZoom = camera.zoom;
+        camera.update();
         return true;
     }
 
