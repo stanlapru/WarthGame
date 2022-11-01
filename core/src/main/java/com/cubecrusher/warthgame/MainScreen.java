@@ -3,11 +3,14 @@ package com.cubecrusher.warthgame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.cubecrusher.warthgame.windows.main.AboutW;
-import com.cubecrusher.warthgame.windows.main.LobbiesW;
+import com.cubecrusher.warthgame.windows.main.MapInfoW;
+import com.cubecrusher.warthgame.windows.main.MapsW;
 import com.cubecrusher.warthgame.windows.main.OptionsW;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.dialog.ConfirmDialogListener;
@@ -19,7 +22,7 @@ import de.eskalon.commons.screen.ScreenManager;
 
 public class MainScreen extends ManagedScreen {
 
-    public Stage stage;
+    public Stage stage = new Stage();
     private boolean debugOn = false;
     private Settings settings;
     private Main game;
@@ -27,9 +30,10 @@ public class MainScreen extends ManagedScreen {
     private final ScreenManager screenManager = new ScreenManager();
     private OptionsW optionsW;
     private AboutW aboutW;
-    private LobbiesW lobbiesW;
+    private MapsW mapsW;
+    private MapInfoW mapInfoW;
     private final String devStage = "Indev";
-    private final String stageID = "cmt7";
+    private final String stageID = "cmt8";
     public String version = "Warth "+devStage+" "+stageID;
 
     public MainScreen(){
@@ -40,11 +44,13 @@ public class MainScreen extends ManagedScreen {
         return version;
     }
 
+    public Stage getStage() {
+        return stage;
+    }
+
     @Override
     protected void create() {
         game.getScreenManager().addScreen("gamemap", new GameMap());
-
-        stage = new Stage();
 
         Gdx.input.setInputProcessor(stage);
 
@@ -54,13 +60,13 @@ public class MainScreen extends ManagedScreen {
 
         optionsW = new OptionsW();
         aboutW = new AboutW();
-        lobbiesW = new LobbiesW();
+        mapsW = new MapsW();
 
-        // Todo: Migrate into a separate method, make button listeners and make Client/Server work (on localhost for now)
+        // Todo: Make Client/Server work (on localhost for now)
         // ^ Deprioritized.
 
-        VisTextButton openTestMapBtn = new VisTextButton("Launch Map");
-        VisTextButton lobbySearchBtn = new VisTextButton("Search Lobbies");
+        VisTextButton playBtn = new VisTextButton("Launch Belarus");
+        VisTextButton browseMapsBtn = new VisTextButton("Browse Maps");
         VisTextButton optionsBtn = new VisTextButton("Options");
         VisTextButton aboutBtn = new VisTextButton("About");
         VisTextButton exitBtn = new VisTextButton("Exit");
@@ -75,21 +81,21 @@ public class MainScreen extends ManagedScreen {
                 System.out.println("Closed menu: " + menu.getTitle());
             }
         });
-
-        openTestMapBtn.addListener(new ClickListener() {
+        playBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("DEBUG: GameMap called.");
+                System.out.println("DEBUG: GameMap called, map: Belarus.");
                 Gdx.input.setInputProcessor(null);
                 game.getScreenManager().pushScreen("gamemap", null);
             }
         });
-        lobbySearchBtn.addListener(new ClickListener() {
+        browseMapsBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                stage.addActor(lobbiesW);
-                lobbiesW.fadeIn();
-                lobbiesW.setVisible(true);
+                System.out.println("DEBUG: MapsW called.");
+                stage.addActor(mapsW);
+                mapsW.fadeIn();
+                mapsW.setVisible(true);
             }
         });
 
@@ -101,7 +107,6 @@ public class MainScreen extends ManagedScreen {
                 optionsW.setVisible(true);
             }
         });
-
         aboutBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -127,8 +132,17 @@ public class MainScreen extends ManagedScreen {
         VisLabel title = new VisLabel("Warth");
         title.setFontScale(4);
 
-        menuBar.addMenu(new Menu("Test"));
-        menuBar.addMenu(new Menu("Test 2"));
+        Menu testMenu = new Menu("Test");
+        MenuItem crashMenuItem = new MenuItem("Free Among Us Download APK Crack 2022 (NEW)", new ChangeListener(){
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                int a = 0;
+                a /= 0;
+            }
+        });
+
+        testMenu.addItem(crashMenuItem);
+        menuBar.addMenu(testMenu);
 
         VisTable root = new VisTable();
         VisTable menu = new VisTable();
@@ -138,8 +152,8 @@ public class MainScreen extends ManagedScreen {
         root.setFillParent(true);
         root.add(menuBar.getTable()).expandX().fillX().row();
         menuBtn.add(title).top().left().spaceBottom(10).row();
-        menuBtn.add(openTestMapBtn).expandX().fillX().spaceBottom(10).row();
-        menuBtn.add(lobbySearchBtn).expandX().fillX().spaceBottom(10).row();
+        menuBtn.add(playBtn).expandX().fillX().spaceBottom(10).row();
+        menuBtn.add(browseMapsBtn).expandX().fillX().spaceBottom(10).row();
         menuBtn.add(optionsBtn).expandX().fillX().spaceBottom(10).row();
         //menuBtn.add(toggleDebugBtn).expandX().fillX().spaceBottom(10).row();
         menuBtn.add(aboutBtn).expandX().fillX().spaceBottom(10).row();

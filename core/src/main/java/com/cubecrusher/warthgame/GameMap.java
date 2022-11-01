@@ -43,6 +43,7 @@ public class GameMap extends ManagedScreen implements InputProcessor, GestureDet
     protected Polygon[] polygons;
     private String[] regionNames;
     private float[] polReg;
+    private float[] capitals;
     private Main game;
     private boolean touchDown, dragged = false;
     private float currentZoom;
@@ -160,12 +161,11 @@ public class GameMap extends ManagedScreen implements InputProcessor, GestureDet
         batch.begin();
         for (int i = 0; i <= polygons.length - 1; i++) {
 
-            drawer.filledPolygon(polygons[i]);
             drawer.setColor(belarus.getRegionColor(i));
-
-             if (polygons[i].contains(Gdx.input.getX(), Gdx.input.getY())) {
-                 drawer.setColor(1,1,1,1);
-            }
+            drawer.filledPolygon(polygons[i]);
+            drawer.setColor(Color.BLACK);
+            drawer.setDefaultLineWidth(2);
+            drawer.polygon(polygons[i]);
 
             if (touchDown && !dragged && isShapeClicked()) {
                 touchDown = false;
@@ -179,6 +179,10 @@ public class GameMap extends ManagedScreen implements InputProcessor, GestureDet
             } else {
                 latestTouchedRegionId = -1;
             }
+        }
+        for (int i = 0; i < 6; i++) {
+            drawer.setColor(Color.WHITE);
+            drawer.filledCircle(belarus.getCapitalPos(i)[0],belarus.getCapitalPos(i)[1],5);
         }
 
         batch.end();
