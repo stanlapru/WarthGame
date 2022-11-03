@@ -10,11 +10,11 @@ import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 
-public class MapInfoW extends VisDialog {
+public class MapInfoD extends VisDialog {
 
     private Main game;
 
-    public MapInfoW(String title, String mapInfo) {
+    public MapInfoD(String title, String mapInfo) {
         super(" "+title);
         setKeepWithinStage(true);
         addCloseButton();

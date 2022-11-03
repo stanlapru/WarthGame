@@ -8,10 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.cubecrusher.warthgame.windows.main.AboutW;
-import com.cubecrusher.warthgame.windows.main.MapInfoW;
-import com.cubecrusher.warthgame.windows.main.MapsW;
-import com.cubecrusher.warthgame.windows.main.OptionsW;
+import com.cubecrusher.warthgame.windows.main.AboutD;
+import com.cubecrusher.warthgame.windows.main.MapInfoD;
+import com.cubecrusher.warthgame.windows.main.MapsD;
+import com.cubecrusher.warthgame.windows.main.OptionsD;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.dialog.ConfirmDialogListener;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
@@ -28,12 +28,12 @@ public class MainScreen extends ManagedScreen {
     private Main game;
     private SpriteBatch batch = new SpriteBatch();
     private final ScreenManager screenManager = new ScreenManager();
-    private OptionsW optionsW;
-    private AboutW aboutW;
-    private MapsW mapsW;
-    private MapInfoW mapInfoW;
+    private OptionsD optionsD;
+    private AboutD aboutD;
+    private MapsD mapsD;
+    private MapInfoD mapInfoD;
     private final String devStage = "Indev";
-    private final String stageID = "cmt8";
+    private final String stageID = "cmt9";
     public String version = "Warth "+devStage+" "+stageID;
 
     public MainScreen(){
@@ -58,9 +58,9 @@ public class MainScreen extends ManagedScreen {
 
         MenuBar menuBar = new MenuBar();
 
-        optionsW = new OptionsW();
-        aboutW = new AboutW();
-        mapsW = new MapsW();
+        optionsD = new OptionsD();
+        aboutD = new AboutD();
+        mapsD = new MapsD();
 
         // Todo: Make Client/Server work (on localhost for now)
         // ^ Deprioritized.
@@ -84,7 +84,7 @@ public class MainScreen extends ManagedScreen {
         playBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("DEBUG: GameMap called, map: Belarus.");
+                System.out.println("DEBUG: GameMap called, map: Belarus6.");
                 Gdx.input.setInputProcessor(null);
                 game.getScreenManager().pushScreen("gamemap", null);
             }
@@ -93,26 +93,26 @@ public class MainScreen extends ManagedScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("DEBUG: MapsW called.");
-                stage.addActor(mapsW);
-                mapsW.fadeIn();
-                mapsW.setVisible(true);
+                stage.addActor(mapsD);
+                mapsD.fadeIn();
+                mapsD.setVisible(true);
             }
         });
 
         optionsBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                stage.addActor(optionsW);
-                optionsW.fadeIn();
-                optionsW.setVisible(true);
+                stage.addActor(optionsD);
+                optionsD.fadeIn();
+                optionsD.setVisible(true);
             }
         });
         aboutBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                stage.addActor(aboutW);
-                aboutW.fadeIn();
-                aboutW.setVisible(true);
+                stage.addActor(aboutD);
+                aboutD.fadeIn();
+                aboutD.setVisible(true);
             }
         });
 

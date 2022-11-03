@@ -5,18 +5,18 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.cubecrusher.warthgame.MainScreen;
 import com.cubecrusher.warthgame.Settings;
 import com.kotcrab.vis.ui.util.TableUtils;
+import com.kotcrab.vis.ui.widget.VisDialog;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisSlider;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
-import com.kotcrab.vis.ui.widget.VisWindow;
 
-public class OptionsW extends VisWindow {
+public class OptionsD extends VisDialog {
     private Settings settings;
     public VisLabel musicV, soundV, debugV = new VisLabel();
     private MainScreen mainScr = new MainScreen();
 
-    public OptionsW() {
+    public OptionsD() {
         super(" Options");
         setKeepWithinStage(true);
         addCloseButton();

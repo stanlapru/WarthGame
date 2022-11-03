@@ -2,29 +2,26 @@ package com.cubecrusher.warthgame.windows.main;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.cubecrusher.warthgame.GameMap;
 import com.cubecrusher.warthgame.Main;
 import com.cubecrusher.warthgame.MainScreen;
 import com.kotcrab.vis.ui.util.TableUtils;
-import com.kotcrab.vis.ui.util.dialog.ConfirmDialogListener;
-import com.kotcrab.vis.ui.util.dialog.Dialogs;
+import com.kotcrab.vis.ui.widget.VisDialog;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
-import com.kotcrab.vis.ui.widget.VisWindow;
 
-public class MapsW extends VisWindow {
+public class MapsD extends VisDialog {
 
-    private MapInfoW mapInfoW;
+    private MapInfoD mapInfoD;
     private MainScreen mainScr;
     private Main game;
     private String actMapName = "";
 
 
-    public MapsW(){
+    public MapsD(){
         super(" Select Map");
         this.game = (Main) Gdx.app.getApplicationListener();
         setKeepWithinStage(true);
@@ -61,7 +58,7 @@ public class MapsW extends VisWindow {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 actMapName = "Belarus";
-                mapInfoW = new MapInfoW(actMapName,getMapInfo(actMapName));
+                mapInfoD = new MapInfoD(actMapName,getMapInfo(actMapName));
                 System.out.println("DEBUG: GameMap called, map: "+actMapName+".");
                 Gdx.input.setInputProcessor(null);
                 game.getScreenManager().pushScreen("gamemap", null);

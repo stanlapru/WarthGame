@@ -19,7 +19,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.cubecrusher.warthgame.maps.Belarus;
+import com.cubecrusher.warthgame.maps.Belarus6;
+import com.cubecrusher.warthgame.windows.game.PauseD;
 import com.cubecrusher.warthgame.windows.game.RegionInfoW;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextButton;
@@ -39,6 +40,7 @@ public class GameMap extends ManagedScreen implements InputProcessor, GestureDet
     private MainScreen mainScr;
     private InputMultiplexer inputMultiplexer;
     private RegionInfoW regionInfoW;
+    private PauseD pauseD;
     private OrthographicCamera camera;
     protected Polygon[] polygons;
     private String[] regionNames;
@@ -47,23 +49,24 @@ public class GameMap extends ManagedScreen implements InputProcessor, GestureDet
     private Main game;
     private boolean touchDown, dragged = false;
     private float currentZoom;
-    private Belarus belarus;
+    private Belarus6 belarus6;
     private String regionName = "";
     private Vector3 tp;
     private int latestTouchedRegionId = -1;
+    public int movesInTurn = 0;
 
     public GameMap(){
         this.game = (Main) Gdx.app.getApplicationListener();
     }
 
     public void region(){
-        belarus = new Belarus();
-        polygons = new Polygon[belarus.getRegionAmt()];
-        regionNames = new String[belarus.getRegionAmt()];
+        belarus6 = new Belarus6();
+        polygons = new Polygon[belarus6.getRegionAmt()];
+        regionNames = new String[belarus6.getRegionAmt()];
         for (int i = 0; i <= polygons.length-1; i++) {
             polygons[i] = new Polygon();
-            polReg = belarus.getVertices(i);
-            regionNames[i] = belarus.getRegionName(i);
+            polReg = belarus6.getVertices(i);
+            regionNames[i] = belarus6.getRegionName(i);
             polygons[i].setVertices(polReg);
         }
     }
@@ -88,7 +91,7 @@ public class GameMap extends ManagedScreen implements InputProcessor, GestureDet
     }
 
     public String getClickedShapeName(){
-        return belarus.getRegionName(getClickedShapeId());
+        return belarus6.getRegionName(getClickedShapeId());
     }
 
     @Override
@@ -98,36 +101,28 @@ public class GameMap extends ManagedScreen implements InputProcessor, GestureDet
         camera = new OrthographicCamera();
         camera.setToOrtho(true);
 
+        pauseD = new PauseD();
         settings = new Settings();
         mainScr = new MainScreen();
 
         VisLabel verLabel = new VisLabel(mainScr.getVersion());
         verLabel.setPosition(10,0);
-        VisTextButton exitBtn = new VisTextButton("Return to Main");
-        exitBtn.setPosition(20,50);
-        VisTextButton resetCamBtn = new VisTextButton("Reset Camera");
-        resetCamBtn.setPosition(20,120);
+        VisTextButton pauseBtn = new VisTextButton("Pause");
+        pauseBtn.setPosition(20,Gdx.graphics.getHeight()-80);
 
-        exitBtn.addListener(new ClickListener() {
+        pauseBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("DEBUG: MainMenu called.");
-                Gdx.input.setInputProcessor(null);
-                game.getScreenManager().pushScreen("main", null);
-            }
-        });
-
-        resetCamBtn.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                camera.position.set(0,0,0);
+                System.out.println("DEBUG: PauseD called.");
+                stage.addActor(pauseD);
+                pauseD.fadeIn();
+                pauseD.setVisible(true);
             }
         });
 
         region();
 
-        stage.addActor(exitBtn);
-        stage.addActor(resetCamBtn);
+        stage.addActor(pauseBtn);
         stage.addActor(verLabel);
         stage.setDebugAll(settings.getDebugEnabled());
 
@@ -161,7 +156,7 @@ public class GameMap extends ManagedScreen implements InputProcessor, GestureDet
         batch.begin();
         for (int i = 0; i <= polygons.length - 1; i++) {
 
-            drawer.setColor(belarus.getRegionColor(i));
+            drawer.setColor(belarus6.getRegionColor(i));
             drawer.filledPolygon(polygons[i]);
             drawer.setColor(Color.BLACK);
             drawer.setDefaultLineWidth(2);
@@ -182,7 +177,7 @@ public class GameMap extends ManagedScreen implements InputProcessor, GestureDet
         }
         for (int i = 0; i < 6; i++) {
             drawer.setColor(Color.WHITE);
-            drawer.filledCircle(belarus.getCapitalPos(i)[0],belarus.getCapitalPos(i)[1],5);
+            drawer.filledCircle(belarus6.getCapitalPos(i)[0], belarus6.getCapitalPos(i)[1],5);
         }
 
         batch.end();
@@ -248,19 +243,7 @@ public class GameMap extends ManagedScreen implements InputProcessor, GestureDet
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        int width = Gdx.graphics.getWidth();
-        int height = Gdx.graphics.getHeight();
-
-        if (screenX == width)
-            camera.translate(50,0);
-        if (screenX == 0)
-            camera.translate(-50,0);
-        if (screenY == height)
-            camera.translate(0,50);
-        if (screenY == 0)
-            camera.translate(0,-50);
-
-        return true;
+        return false;
     }
 
     @Override
