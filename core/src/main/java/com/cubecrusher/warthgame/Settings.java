@@ -8,14 +8,16 @@ public class Settings {
 
     private float sound; // Sound volume
     private float music; // Music volume
-    private int version; // Last played version
+    private String version; // Last played version
+    private boolean privacy; // Privacy Policy acknowledged
     private boolean debug; // Display debug information
 
     public Settings(){
         prefs = Gdx.app.getPreferences("WarthSettings");
         sound = prefs.getFloat("sound",1.0f);
         music = prefs.getFloat("music",1.0f);
-        version = prefs.getInteger("version", 1);
+        version = prefs.getString("version", "");
+        privacy = prefs.getBoolean("privacy", false);
         debug = prefs.getBoolean("debug",true);
     }
 
@@ -31,9 +33,15 @@ public class Settings {
         prefs.flush();
     }
 
-    public void setVersion(int version){
+    public void setVersion(String version){
         this.version = version;
-        prefs.putInteger("version",version);
+        prefs.putString("version",version);
+        prefs.flush();
+    }
+
+    public void setPrivacyAcknowledged(boolean privacy){
+        this.privacy = privacy;
+        prefs.putBoolean("privacy",privacy);
         prefs.flush();
     }
 
@@ -53,5 +61,13 @@ public class Settings {
 
     public boolean getDebugEnabled(){
         return debug;
+    }
+
+    public String getVersion(){
+        return version;
+    }
+
+    public boolean getPrivacyAcknowledged(){
+        return privacy;
     }
 }

@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.cubecrusher.warthgame.windows.main.LoginD;
+import com.github.scribejava.core.builder.ServiceBuilder;
+import com.github.scribejava.core.oauth.OAuth20Service;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.dialog.ConfirmDialogListener;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
@@ -13,6 +16,8 @@ import com.kotcrab.vis.ui.widget.LinkLabel;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
+
+import java.security.Provider;
 
 import de.eskalon.commons.screen.ManagedScreen;
 import de.eskalon.commons.screen.ScreenManager;
@@ -25,11 +30,10 @@ public class LoginScreen extends ManagedScreen {
     private Settings settings;
     private Main game;
     private SpriteBatch batch = new SpriteBatch();
+    private LoginD loginD;
     private final ScreenManager screenManager = new ScreenManager();
-    private final String devStage = "Indev";
-    private final String stageID = "cmt1";
-    public String version = "Warth "+devStage+" "+stageID;
-    private String gpSignInBtn = "Sign in to Google Play";
+    private String gpSignInBtn;
+    //final OAuth20Service service;
 
     public LoginScreen(){
         this.game = (Main) Gdx.app.getApplicationListener();
@@ -37,41 +41,16 @@ public class LoginScreen extends ManagedScreen {
 
     @Override
     protected void create() {
-
-        if (game.gsClient.isSessionActive())
-            game.getScreenManager().pushScreen("main", "blend");
-
+        //service = new ServiceBuilder("").apiSecret("").build();
         game.getScreenManager().addScreen("main", new MainScreen());
         game.getScreenManager().addScreenTransition("blend",new BlendingTransition(batch,1f));
 
         settings = new Settings();
         if (settings.getDebugEnabled())
             debugOn = true;
+        String version = settings.getVersion();
 
-        VisTextButton googlePlayLoginBtn = new VisTextButton(gpSignInBtn);
-        VisTextButton exitBtn = new VisTextButton("Exit");
-
-        googlePlayLoginBtn.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (!game.gsClient.isSessionActive())
-                    game.gsClient.logIn();
-                game.getScreenManager().pushScreen("main", "blend");
-            }
-        });
-
-        exitBtn.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Dialogs.showConfirmDialog(stage, " Exit", "  Really quit?  \n", new String[]{"Yes", "No"}, new Integer[]{1,0}, new ConfirmDialogListener<Integer>() {
-                    @Override
-                    public void result(Integer result) {
-                        if (result == 1)
-                            System.exit(0);
-                    }
-                });
-            }
-        });
+        loginD = new LoginD();
 
         VisTable root = new VisTable();
         VisTable menu = new VisTable();
@@ -79,15 +58,13 @@ public class LoginScreen extends ManagedScreen {
         root.setFillParent(true);
 
         footer.add(new VisLabel(version)).left();
-        footer.add(new LinkLabel("Discord","https://discord.gg/a2av2JmzSX")).left().padLeft(30);
-        menu.add(googlePlayLoginBtn).spaceBottom(10).row();
-        menu.add(exitBtn).row();
         root.add(menu).expand().fill().row();
         root.add(footer).expandX().left().padLeft(10);
 
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
         stage.addActor(root);
+        stage.addActor(loginD);
         stage.setDebugAll(debugOn);
     }
 

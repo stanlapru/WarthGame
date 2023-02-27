@@ -24,7 +24,7 @@ public class AboutD extends VisDialog {
     private void addWidgets(){
         VisLabel gameVer = new VisLabel(mainScr.getVersion());
         gameVer.setFontScale(1.5f);
-        VisLabel gameDev = new VisLabel("by cubecrusher (c) 2022");
+        VisLabel gameDev = new VisLabel("by cubecrusher (c) 2023");
         VisLabel usingLibsBy = new VisLabel("using libraries by:");
         LinkLabel smgrLabel = new LinkLabel("crykn - libgdx-screenmanager","https://github.com/crykn/libgdx-screenmanager");
         LinkLabel visuiLabel = new LinkLabel("kotcrab - vis-ui","https://github.com/kotcrab/vis-ui");

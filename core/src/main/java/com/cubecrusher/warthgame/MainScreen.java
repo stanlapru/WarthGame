@@ -24,7 +24,7 @@ public class MainScreen extends ManagedScreen {
 
     public Stage stage = new Stage();
     private boolean debugOn = false;
-    private Settings settings;
+    private Settings settings = new Settings();
     private Main game;
     private SpriteBatch batch = new SpriteBatch();
     private final ScreenManager screenManager = new ScreenManager();
@@ -32,16 +32,13 @@ public class MainScreen extends ManagedScreen {
     private AboutD aboutD;
     private MapsD mapsD;
     private MapInfoD mapInfoD;
-    private final String devStage = "Indev";
-    private final String stageID = "cmt9";
-    public String version = "Warth "+devStage+" "+stageID;
 
     public MainScreen(){
         this.game = (Main) Gdx.app.getApplicationListener();
     }
 
     public String getVersion(){
-        return version;
+        return settings.getVersion();
     }
 
     public Stage getStage() {
@@ -56,14 +53,11 @@ public class MainScreen extends ManagedScreen {
 
         settings = new Settings();
 
-        MenuBar menuBar = new MenuBar();
-
         optionsD = new OptionsD();
         aboutD = new AboutD();
         mapsD = new MapsD();
 
         // Todo: Make Client/Server work (on localhost for now)
-        // ^ Deprioritized.
 
         VisTextButton playBtn = new VisTextButton("Launch Belarus");
         VisTextButton browseMapsBtn = new VisTextButton("Browse Maps");
@@ -71,16 +65,6 @@ public class MainScreen extends ManagedScreen {
         VisTextButton aboutBtn = new VisTextButton("About");
         VisTextButton exitBtn = new VisTextButton("Exit");
 
-        menuBar.setMenuListener(new MenuBar.MenuBarListener() {
-            @Override
-            public void menuOpened (Menu menu) {
-                System.out.println("Opened menu: " + menu.getTitle());
-            }
-            @Override
-            public void menuClosed (Menu menu) {
-                System.out.println("Closed menu: " + menu.getTitle());
-            }
-        });
         playBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -142,7 +126,6 @@ public class MainScreen extends ManagedScreen {
         });
 
         testMenu.addItem(crashMenuItem);
-        menuBar.addMenu(testMenu);
 
         VisTable root = new VisTable();
         VisTable menu = new VisTable();
@@ -150,7 +133,6 @@ public class MainScreen extends ManagedScreen {
         VisTable footer = new VisTable();
 
         root.setFillParent(true);
-        root.add(menuBar.getTable()).expandX().fillX().row();
         menuBtn.add(title).top().left().spaceBottom(10).row();
         menuBtn.add(playBtn).expandX().fillX().spaceBottom(10).row();
         menuBtn.add(browseMapsBtn).expandX().fillX().spaceBottom(10).row();
@@ -163,8 +145,8 @@ public class MainScreen extends ManagedScreen {
         //menu.add(chatWindow).expand();
         root.add(menu).expand().fill().row();
         root.add(footer).expandX().left().padLeft(10);
-        footer.add(new VisLabel(version)).left();
-        footer.add(new LinkLabel("Discord","https://discord.gg/a2av2JmzSX")).left().padLeft(30);
+        footer.add(new VisLabel(settings.getVersion())).left();
+        footer.add(new LinkLabel("Discord","https://discord.gg/M5pdtAaHKQ")).left().padLeft(30);
 
         stage.addActor(root);
         stage.setDebugAll(debugOn);

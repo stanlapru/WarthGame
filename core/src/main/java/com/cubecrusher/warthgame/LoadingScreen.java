@@ -1,15 +1,11 @@
 package com.cubecrusher.warthgame;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.kotcrab.vis.ui.VisUI;
-import com.strongjoshua.console.Console;
-import com.strongjoshua.console.GUIConsole;
 
 import de.eskalon.commons.screen.ManagedScreen;
 import de.eskalon.commons.screen.ScreenManager;
@@ -22,6 +18,11 @@ public class LoadingScreen extends ManagedScreen {
     private final ScreenManager screenManager = new ScreenManager();
     private final AssetManager assetManager = AssetMgr.manager;
     private Viewport viewport;
+    private Settings settings;
+    private final String devStage = "Indev";
+    private final String stageID = "cmt10";
+    private final String stageComment = "";
+    public String version = "Warth "+devStage+" "+stageID+" "+stageComment;
     BitmapFont font = new BitmapFont();
     int n = 0;
 
@@ -36,6 +37,8 @@ public class LoadingScreen extends ManagedScreen {
         game.getScreenManager().addScreen("main", new MainScreen());
         game.getScreenManager().addScreenTransition("blend",new BlendingTransition(batch,0.5f));
         viewport = new FitViewport(game.getWidth(), game.getHeight());
+        settings = new Settings();
+        settings.setVersion(version);
         AssetMgr.preLoad();
     }
 
@@ -55,7 +58,7 @@ public class LoadingScreen extends ManagedScreen {
                     //else
                         //game.getScreenManager().pushScreen("main", "blend");
                 //} else {
-                    game.getScreenManager().pushScreen("main", "blend");
+                    game.getScreenManager().pushScreen("login", "blend");
                 //}
             }
         }

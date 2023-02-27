@@ -110,6 +110,9 @@ public class GameMap extends ManagedScreen implements InputProcessor, GestureDet
         VisTextButton pauseBtn = new VisTextButton("Pause");
         pauseBtn.setPosition(20,Gdx.graphics.getHeight()-80);
 
+        VisTextButton resetCamBtn = new VisTextButton("Reset Camera");
+        resetCamBtn.setPosition(20,Gdx.graphics.getHeight()-150);
+
         pauseBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -120,9 +123,18 @@ public class GameMap extends ManagedScreen implements InputProcessor, GestureDet
             }
         });
 
+        resetCamBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("DEBUG: ResetCam called.");
+                camera.position.set(0,0,0);
+            }
+        });
+
         region();
 
         stage.addActor(pauseBtn);
+        stage.addActor(resetCamBtn);
         stage.addActor(verLabel);
         stage.setDebugAll(settings.getDebugEnabled());
 
@@ -139,6 +151,7 @@ public class GameMap extends ManagedScreen implements InputProcessor, GestureDet
         drawer = new ShapeDrawer(batch, region);
 
         camera.position.set(0,0,0);
+        camera.zoom = 1.5f;
     }
 
     @Override
@@ -147,6 +160,7 @@ public class GameMap extends ManagedScreen implements InputProcessor, GestureDet
 
     @Override
     public void render(float delta) {
+        currentZoom = camera.zoom;
         if (Gdx.input.getInputProcessor() != inputMultiplexer)
             Gdx.input.setInputProcessor(inputMultiplexer);
 
@@ -248,8 +262,12 @@ public class GameMap extends ManagedScreen implements InputProcessor, GestureDet
 
     @Override
     public boolean scrolled(float amountX, float amountY) {
-        //camera.zoom = amountX*0.01f + currentZoom;
-        //camera.update();
+        camera.zoom = (amountY*0.1f) + currentZoom;
+        if (camera.zoom > 5f)
+            camera.zoom = 5f;
+        if (camera.zoom < 0.1f)
+            camera.zoom = 0.1f;
+        camera.update();
         return false;
     }
 
